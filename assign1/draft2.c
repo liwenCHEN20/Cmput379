@@ -28,10 +28,10 @@ int main() {
 	
 	
 		
-		x = sigsetjmp(env,1);
+	x = sigsetjmp(env,1);
 
-		
-		
+	
+	
 
 
     address = address + page_size;
@@ -72,8 +72,10 @@ int main() {
 		*address = 'c';
 	}
 
-}
+	
 
+    //exit(0);
+}
 
 void segfault_handler(int signo) {
 	//printf("SIGSEGV handler ...\n");
