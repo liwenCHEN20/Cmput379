@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     act.sa_handler = segfault_handler;
     sigemptyset(&act.sa_mask);
     act.sa_flags = 0;
-    sigaction(SIGINT, &act, 0);
+    sigaction(SIGSEGV, &act, 0);
 
     
 	
