@@ -26,56 +26,54 @@ int main() {
 	
 	signal(SIGSEGV, segfault_handler);
 	
-	while (1)
-	{	
+	
+		
 		x = sigsetjmp(env,1);
 
 		
 		
 
 
-	    address = address + page_size;
-		//printf("%p\n", address);	
+    address = address + page_size;
+	//printf("%p\n", address);	
 
-		if (start_parsing)
-		{
-			if (fail_to_write == 1)
-				permission = 0;
-			else if (fail_to_read == 1)
-				permission = -1;
-			else
-				permission = 1;	
-		
-
-		if (permission == -1)
-			printf("%p RW = -1\n", address);
-		else if (permission == 0)
-			printf("%p RW = 0\n", address);
+	if (start_parsing)
+	{
+		if (fail_to_write == 1)
+			permission = 0;
+		else if (fail_to_read == 1)
+			permission = -1;
 		else
-			printf("%p RW = 1\n", address);
-
-		}
-
-
-
-		if((unsigned int)address + page_size < (unsigned int)address)
-			exit(1);
-		else
-		{ 
-			//raise(SIGSEGV);
-			start_parsing = 1;
-			fail_to_read = 0;
-			fail_to_write = 0;
-			RW_code = 1;
-			arbitrary = *address;	
-			RW_code = 2;
-			*address = 'c';
-		}
+			permission = 1;	
 	
+
+	if (permission == -1)
+		printf("%p RW = -1\n", address);
+	else if (permission == 0)
+		printf("%p RW = 0\n", address);
+	else
+		printf("%p RW = 1\n", address);
+
 	}
 
-    //exit(0);
+
+
+	if((unsigned int)address + page_size < (unsigned int)address)
+		exit(1);
+	else
+	{ 
+		//raise(SIGSEGV);
+		start_parsing = 1;
+		fail_to_read = 0;
+		fail_to_write = 0;
+		RW_code = 1;
+		arbitrary = *address;	
+		RW_code = 2;
+		*address = 'c';
+	}
+
 }
+
 
 void segfault_handler(int signo) {
 	//printf("SIGSEGV handler ...\n");
