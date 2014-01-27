@@ -13,7 +13,8 @@ static void segfault_handler(int);
 
 int main(int argc, char **argv)
 {
-	char *address = 0;
+	//char *address = 0;
+	char *address = (char *)0xFFFFF000;
 	int page_size = 4096;
 	//address = address - page_size;
 	char arbitrary;
@@ -36,7 +37,7 @@ int main(int argc, char **argv)
 		sigsetjmp(env,1);		/* Control is given back to this point after segfault_handler*/
 	
 		///////// the code dealing with chunks should maily be under this condition
-		if (RW_code != 1)	//&&(RW_code != 0))
+		if ((RW_code == 2)||(RW_code == 33333))	//&&(RW_code != 0))
 			printf("%p RW_code = %d\n", address, RW_code);
 
 		address = address + page_size;
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
 			arbitrary = *address;		/* Read from memory */
 			RW_code = 2;
 			*address = 'c';			/* Write to memory */
-			RW_code = 3;
+			RW_code = 33333;
 			*address = arbitrary;		/* Permission to write, set value back to original */
 		
 		}
@@ -79,7 +80,7 @@ void segfault_handler(int sig)
 		fail_to_read = 0;
 		
 	}
-	else if (RW_code == 3)
+	else if (RW_code == 33333)
 	{
 		fail_to_write = 0;
 		fail_to_read = 0;
