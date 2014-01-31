@@ -1,3 +1,10 @@
+/*
+ * Cmput379 - Assignment 1
+ * Maxime Convert
+ * Student ID: 1297078
+ */
+
+
 #include <setjmp.h>
 #include <signal.h>
 #include <stdio.h>
@@ -11,15 +18,6 @@ static sigjmp_buf env;
 
 static void segfault_handler(int);
 
-
-int main(int argc, char **argv)
-{
-	struct memchunk chunk_list[100];
-	int size = 100;
-	int actual_size = get_mem_layout(chunk_list, size);
-	printf("total number of chunks: %d\n", actual_size);
-	return 0;
-}
 
 
 int get_mem_layout (struct memchunk *chunk_list, int size)
@@ -36,8 +34,6 @@ int get_mem_layout (struct memchunk *chunk_list, int size)
 	char *addr;
 	char *start_addr;
 
-	printf("LOCAL VARIABLES: &aux %p, &chunk_counters %p, &arbitrary %p\n", &aux, &chunk_counter, &arbitrary);
-	printf("GLOBAL VARIABLES: RW_code %p, env %p\n", &RW_code, &env);
 
 	/* Variable initializations */
 	chunk_counter = 0;
@@ -77,8 +73,6 @@ int get_mem_layout (struct memchunk *chunk_list, int size)
 				chunk_list[chunk_counter] = chunk;
 								
 				save_chunk = 0;
-
-				printf("start = %p, length = %lu, RW = %d\n", chunk.start, chunk.length, chunk.RW);
 			}
 			
 			if ((RW_code == 2)||(RW_code == 3))
