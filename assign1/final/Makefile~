@@ -1,0 +1,9 @@
+testprogram: testprogram.o
+	gcc -Wall -m32 -o testprogram testprogram.o
+
+testprogram.o: testprogram.c memchunk.h
+	gcc -Wall -m32 -c testprogram.c
+	gcc -Wall -m32 -c memchunk.h
+
+clean:
+	rm -rf *.o testprogram

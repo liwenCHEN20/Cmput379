@@ -1,3 +1,9 @@
+/*
+ * Cmput379 - Assignment 1
+ * Maxime Convert
+ * Student ID: 1297078
+ */
+
 struct memchunk 
 {
 	void *start;

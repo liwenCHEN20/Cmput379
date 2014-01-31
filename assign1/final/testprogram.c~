@@ -24,10 +24,9 @@ int main(int argc, char **argv)
 
 	struct memchunk chunk_list[100];
 	
-	size = 100;
 	z = malloc(10);
 
-	
+	size = 100;
 
 	chunk_count = get_mem_layout(chunk_list, size);
 

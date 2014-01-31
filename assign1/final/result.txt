@@ -1,0 +1,70 @@
+/*
+ * Cmput379 - Assignment 1
+ * Maxime Convert
+ * Student ID: 1297078
+ */
+
+The output of the test program is as follows:
+
+#------------------------------------#
+start: 0x8048000, length: 2, RW: 0
+start: 0x804a000, length: 1, RW: 1
+start: 0x8f37000, length: 33, RW: 1
+start: 0xf75cd000, length: 1, RW: 1
+start: 0xf75ce000, length: 422, RW: 0
+start: 0xf7774000, length: 4, RW: 1
+start: 0xf77aa000, length: 2, RW: 1
+start: 0xf77ac000, length: 34, RW: 0
+start: 0xf77ce000, length: 1, RW: 1
+start: 0xff991000, length: 34, RW: 1
+#------------------------------------#
+The total number of chunks is: 10
+
+Static global (initialized): &v = 0x804a030
+Static global (non-initialized): &w = 0x804a048
+Local (initialized): &x = 0xff9b1748
+Local (non-initialized): &y = 0xff9b174c
+Local (memory allocated): &z = 0x8f37008
+Malloc address: 0x8048410
+Main function address: 0x8048554
+
+
+
+
+
+
+
+After running the program several times, it seems the total number of
+chunks is always 10. Further, the size of each chunk seems to remain
+unchanged across runs. The starting address of the first two chunks
+is always the same, while it tends to vary slightly for the last seven
+chunks. 
+
+The test program also prints the address of some variables that are
+placed by the OS on different segments in memory:
+
+- v should be placed on the data segment so the second chunk seems to be 
+the data as well, but slightly after the data. 
+- w should be placed on the bss segment so the second chunk seems to
+be the bss.
+From the above two cases, it seems chunk 2 both contains Data and BSS.
+Our program just did not distinguish them since they both have same
+permissions and they stand within a single page.
+- z should be placed on the heap so the third chunk seems to be the heap.
+The permission set to read-write confirms our guess.
+
+Hence the whole data segment which comprises Data+BSS+Heap is represented
+by chunks 2 and 3.
+
+
+
+- x & y should be placed on the stack so the last chunk seems to be the stack,
+which makes sense since it has read-write permission.
+
+
+
+- The address of malloc and main should both be in the segment containing
+executable code so the first chunk seems to be the text segment, and the
+RW makes sense since it should be only readable by programs. 
+
+

@@ -35,6 +35,19 @@ int get_mem_layout (struct memchunk *chunk_list, int size)
 	char *start_addr;
 
 
+
+	///////////////////////////
+	int *array;
+	array = malloc(10);
+	printf("Static variable initialized: &RW_code = %p\n", &RW_code);
+	printf("Static variable non-initialized: &env = %p\n", &env);
+	printf("Variable declared and initialized: &aux = %p\n", &aux);	
+	printf("Variable with memory allocated: &array = %p\n", array);
+
+	///////////////////////////
+
+
+
 	/* Variable initializations */
 	chunk_counter = 0;
 	page_size = getpagesize();
