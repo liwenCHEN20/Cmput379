@@ -36,6 +36,8 @@ int get_mem_layout (struct memchunk *chunk_list, int size)
 	char *addr;
 	char *start_addr;
 
+	printf("LOCAL VARIABLES: &aux %p, &chunk_counters %p, &arbitrary %p\n", &aux, &chunk_counter, &arbitrary);
+	printf("GLOBAL VARIABLES: RW_code %p, env %p\n", &RW_code, &env);
 
 	/* Variable initializations */
 	chunk_counter = 0;
