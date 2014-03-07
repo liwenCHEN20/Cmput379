@@ -39,14 +39,15 @@ struct con {
 	size_t bs;	/* total size of the buffer */
 	size_t bl;	/* how much we have left to read/write */
 	int req_valid;	/* the code of the request: 200, 400, 403, 404, 500 */
+	FILE *fp;	/* the file pointer of the request file */
 };
 
 
 struct input_arg 
 {
 	int port;
+	char *reqdir;	
 	char *logfile;
-	char *reqdir;
 };
 
 struct con connections[MAXCONN];
@@ -123,10 +124,70 @@ void check_inputs(struct input_arg *args, int argc, char **argv)
 }
 
 
+void open_file(struct con *cp)
+{
+	FILE *fp;
+	char path[BUF_ASIZE];
+
+	strcpy(path, args.reqdir);		
+	
+	if (cp->req_valid == 200)
+		return;
+	else if (cp->req_valid == 400)
+		strcat(path, "/400.html");		
+	else if (cp->req_valid == 403)
+		strcat(path, "/403.html");	
+	else if (cp->req_valid == 404)
+		strcat(path, "/404.html");
+	else if (cp->req_valid == 500)
+		strcat(path, "/500.html");
+		
+	fp = fopen(path, "r");
+	cp->fp = fp;
+
+}
+
+
+void create_header(struct con *cp)
+{
+	char line[35];
+	int len;
+
+	memset(line, 0, 35);
+	/* First, create the line printing the HTTP ver and the error code */
+	
+	if (cp->req_valid == 200){
+		len = 16;
+		strncpy(line, "HTTP/1.1 200 OK\n", len);
+	}
+	else if (cp->req_valid == 400){
+		len = 25;
+		strncpy(line, "HTTP/1.1 400 Bad Request\n", len);
+	}	
+	else if (cp->req_valid == 403){
+		len = 23;
+		strncpy(line, "HTTP/1.1 403 Forbidden\n", len);	
+	}	
+	else if (cp->req_valid == 404){
+		len = 23;
+		strncpy(line, "HTTP/1.1 404 Not Found\n", len);
+	}
+	else if (cp->req_valid == 500){
+		len = 35;
+		strncpy(line, "HTTP/1.1 500 Internal Server Error\n", len);
+	}
+	
+	
+	
+
+
+
+}
+
 
 void handle_read(struct con *cp)
 {
-		
+
 }
 
 
@@ -286,9 +347,12 @@ int main(int argc,  char *argv[])
 				memcpy(&cp->sa, &client, sizeof(client));
 				
 
-				handle_read(cp);	/* get the request in the con struct */
-				check_request(cp);	/* check validity of the request*/
+				//handle_read(cp);	/* get the request in the con struct */
+				//check_request(cp);	/* check validity of the request*/
 		
+				open_file(cp);
+				create_header(cp);
+
 			}
 
 			/*			
@@ -311,7 +375,7 @@ int main(int argc,  char *argv[])
 					written += w;
 			}
 			*/
-			printf("Tralala\n");
+			//printf("Tralala\n");
 			exit(0);
 		}
 		close(clientsd);
